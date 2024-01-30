@@ -26,3 +26,5 @@ print(qid)
 
 copied_into_result_df = session.create_dataframe(copied_into_result)
 copied_into_result_df.show()
+
+rejects = code_library.collect_rejects(session,qid,config_snow_copy)
