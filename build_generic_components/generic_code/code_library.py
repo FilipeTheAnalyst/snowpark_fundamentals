@@ -26,3 +26,12 @@ def copy_to_table(session,config_file,schema='NA'):
         if "COPY" in id.sql_text:
             qid = id.query_id
     return copied_into_result, qid
+
+def collect_rejects(session,qid,config_file):
+    database_name = config_file.get("Database_name")
+    Schema_name = config_file.get("Schema_name")
+    Target_table = config_file.get("Target_table")
+    Reject_table = config_file.get("Reject_table")
+    rejects = session.sql("select *  from table(validate("+database_name+"."+Schema_name+"."+Target_table+" , job_id =>"+ "'"+ qid +"'))")
+    rejects.write.mode("append").save_as_table(Reject_table)
+    return rejects
